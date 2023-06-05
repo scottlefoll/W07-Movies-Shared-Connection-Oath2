@@ -1,0 +1,237 @@
+openapi: 3.0.1
+info:
+  title: defaultTitle
+  description: defaultDescription
+  contact:
+    name: Scott LeFoll
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+  version: "0.1"
+servers:
+- url: https://cse-342-spring23-w03.onrender.com
+paths:
+  /movies/create:
+    post:
+      description: Auto generated using Swagger Inspector
+      operationId: moviesCreatePOST
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/movies_create_body'
+            examples:
+              "0":
+                value: |-
+                  {
+                      "firstName": "Zoe",
+                      "lastName": "Smithson",
+                      "email": "zsmithson@gmail.com",
+                      "favoriteColor": "green",
+                      "birthday": "1990-05-15T00:00:00.000Z"
+                  }
+      responses:
+        "201":
+          description: Auto generated using Swagger Inspector
+          content:
+            application/json; charset=utf-8:
+              schema:
+                type: string
+                x-content-type: application/json; charset=utf-8
+              examples: {}
+      servers:
+      - url: https://cse-342-spring23-w03.onrender.com
+      x-swagger-router-controller: Default
+    servers:
+    - url: https://cse-342-spring23-w03.onrender.com
+  /movies/lastName/doe:
+    get:
+      description: Auto generated using Swagger Inspector
+      operationId: moviesLastNameDoeGET
+      responses:
+        "200":
+          description: Auto generated using Swagger Inspector
+          content:
+            application/json; charset=utf-8:
+              schema:
+                type: string
+                x-content-type: application/json; charset=utf-8
+              examples: {}
+      servers:
+      - url: https://cse-342-spring23-w03.onrender.com
+      x-swagger-router-controller: Default
+    servers:
+    - url: https://cse-342-spring23-w03.onrender.com
+  /movies/update/zoe_smithson:
+    post:
+      description: Auto generated using Swagger Inspector
+      operationId: moviesUpdateZoe_smithsonPOST
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/update_zoe_smithson_body'
+            examples:
+              "0":
+                value: |-
+                  {
+                      "firstName": "Zoe",
+                      "lastName": "Smithson",
+                      "email": "zsmithson@gmail.com",
+                      "favoriteColor": "blue",
+                      "birthday": "1990-05-15T00:00:00.000Z"
+                  }
+      responses:
+        "200":
+          description: Auto generated using Swagger Inspector
+          content:
+            application/json; charset=utf-8:
+              schema:
+                type: string
+                x-content-type: application/json; charset=utf-8
+              examples: {}
+      servers:
+      - url: https://cse-342-spring23-w03.onrender.com
+      x-swagger-router-controller: Default
+    servers:
+    - url: https://cse-342-spring23-w03.onrender.com
+  /movies/delete/zoe_smithson:
+    post:
+      description: Auto generated using Swagger Inspector
+      operationId: moviesDeleteZoe_smithsonPOST
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/delete_zoe_smithson_body'
+            examples:
+              "0":
+                value: |-
+                  {
+                      "firstName": "Zoe",
+                      "lastName": "Smithson",
+                      "email": "zsmithson@gmail.com",
+                      "favoriteColor": "blue",
+                      "birthday": "1990-05-15T00:00:00.000Z"
+                  }
+      responses:
+        "404":
+          description: Auto generated using Swagger Inspector
+          content:
+            text/html; charset=utf-8:
+              schema:
+                type: string
+                x-content-type: text/html; charset=utf-8
+              examples: {}
+      servers:
+      - url: https://cse-342-spring23-w03.onrender.com
+      x-swagger-router-controller: Default
+    servers:
+    - url: https://cse-342-spring23-w03.onrender.com
+  /movies/jane_doe:
+    get:
+      description: Auto generated using Swagger Inspector
+      operationId: moviesJane_doeGET
+      responses:
+        "200":
+          description: Auto generated using Swagger Inspector
+          content:
+            application/json; charset=utf-8:
+              schema:
+                type: string
+                x-content-type: application/json; charset=utf-8
+              examples: {}
+      servers:
+      - url: https://cse-342-spring23-w03.onrender.com
+      x-swagger-router-controller: Default
+    servers:
+    - url: https://cse-342-spring23-w03.onrender.com
+  /movies/firstName/jane:
+    get:
+      description: Auto generated using Swagger Inspector
+      operationId: moviesFirstNameJaneGET
+      responses:
+        "200":
+          description: Auto generated using Swagger Inspector
+          content:
+            application/json; charset=utf-8:
+              schema:
+                type: string
+                x-content-type: application/json; charset=utf-8
+              examples: {}
+      servers:
+      - url: https://cse-342-spring23-w03.onrender.com
+      x-swagger-router-controller: Default
+    servers:
+    - url: https://cse-342-spring23-w03.onrender.com
+  /db:
+    get:
+      description: Auto generated using Swagger Inspector
+      operationId: dbGET
+      responses:
+        "200":
+          description: Auto generated using Swagger Inspector
+          content:
+            application/json; charset=utf-8:
+              schema:
+                type: string
+                x-content-type: application/json; charset=utf-8
+              examples: {}
+      servers:
+      - url: https://cse-342-spring23-w03.onrender.com
+      x-swagger-router-controller: Default
+    servers:
+    - url: https://cse-342-spring23-w03.onrender.com
+  /movies:
+    get:
+      description: Auto generated using Swagger Inspector
+      operationId: moviesGET
+      responses:
+        "200":
+          description: Auto generated using Swagger Inspector
+      servers:
+      - url: https://cse-342-spring23-w03.onrender.com
+      x-swagger-router-controller: Default
+    servers:
+    - url: https://cse-342-spring23-w03.onrender.com
+components:
+  schemas:
+    movies_create_body:
+      type: object
+      properties:
+        birthday:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        favoriteColor:
+          type: string
+        email:
+          type: string
+    update_zoe_smithson_body:
+      type: object
+      properties:
+        birthday:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        favoriteColor:
+          type: string
+        email:
+          type: string
+    delete_zoe_smithson_body:
+      type: object
+      properties:
+        birthday:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        favoriteColor:
+          type: string
+        email:
+          type: string

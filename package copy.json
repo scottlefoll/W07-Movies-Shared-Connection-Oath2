@@ -1,0 +1,27 @@
+{
+  "name": "name_server",
+  "version": "1.0.0",
+  "description": "CSE 341 W01 NodeJS Server",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js",
+    "start-prod": "node server.js"
+  },
+  "author": "Scott LeFoll",
+  "license": "MIT",
+  "engines": {
+    "node": ">=14 <15"
+  },
+  "dependencies": {
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "mongodb": "5.3",
+    "mongoose": "^7.0.5",
+    "ngrok": "^4.3.3",
+    "twilio": "^4.10.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.22"
+  }
+}

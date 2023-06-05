@@ -1,0 +1,202 @@
+import express from 'express';
+import bodyParser from 'body-parser';
+import user from './routes/user';
+import {MongoClient} from 'mongodb';
+const CONN_URL = 'mongodb://localhost:27017';
+let mongoClient = null;
+MongoClient.connect(CONN_URL,{ useNewUrlParser: true }, function (err, client) {
+   mongoClient = client;
+})
+let app = express();
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: false }));
+// parse application/json
+app.use(bodyParser.json());
+app.use((req,res,next)=>{
+   req.db = mongoClient.db('test');
+   next();
+})
+app.get('/',(req,res,next)=>{
+    res.status(200).send({
+      status:true,
+      response:'Hello World!'
+    });
+});
+app.use('/user',user);
+app.listen(30006,()=>{
+   console.log(' ********** : running on 30006');
+})
+process.on('exit', (code) => {
+   mongoClient.close();
+   console.log(`About to exit with code: ${code}`);
+});
+process.on('SIGINT', function() {
+   console.log("Caught interrupt signal");
+   process.exit();
+});
+module.exports = app;
+
+
+//  connect with mongoose
+// mongoose.connect(process.env.MONGODB_URI, {
+// const database = mongoose.connection
+
+// database.on('error', (error) => {
+//     console.log(error)
+// })
+
+// database.once('connected', () => {
+//     console.log('Database Connected');
+// })
+
+// app.listen(3000, () => {
+//     console.log(`Server Started at ${3000}`)
+// })
+
+// Create a MongoClient with a MongoClientOptions object to set the Stable API version
+/**
+ * The Mongo Client you will use to interact with your database
+ * See https://mongodb.github.io/node-mongodb-native/3.6/api/MongoClient.html for more details
+ * In case: '[MONGODB DRIVER] Warning: Current Server Discovery and Monitoring engine is deprecated...'
+ * pass option { useUnifiedTopology: true } to the MongoClient constructor.
+ * const client =  new MongoClient(uri, {useUnifiedTopology: true})
+ */
+
+/**
+ * Connection URI. Update <username>, <password>, and <your-cluster-url> to reflect your cluster.
+ * See https://docs.mongodb.com/drivers/node/ for more details
+ */
+
+// const client = new MongoClient(process.env.MONGODB_URI, {
+//     serverApi: {
+//       version: ServerApiVersion.v1,
+//       strict: true,
+//       deprecationErrors: true,
+//     }
+//   });
+
+
+async function run() {
+    // const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+    const client = new MongoClient(uri);
+    try {
+        // Connect the client to the server
+        await client.connect();
+        // Send a ping to confirm a successful connection
+        await client.db("admin").command({ ping: 1 });
+        console.log("Pinged your deployment. You successfully connected to MongoDB!");
+    } finally {
+        // client closes when finished
+        // Close the connection to the MongoDB cluster
+        await client.close();
+    }
+  }
+
+run().catch(console.dir);
+// main().catch(console.error);
+
+// Add functions that make DB calls here
+async function listDatabases(client){
+    databasesList = await client.db().admin().listDatabases();
+    console.log("Databases:");
+    databasesList.databases.forEach(db => console.log(` - ${db.name}`));
+};
+
+//  query all the documents in the movies collection
+async function listContacts(client){
+    const cursor = client.db(db_name).collection(coll).find();
+    const collection = await cursor.toArray();
+    console.log(collection);
+};
+
+//  query a specific document in the movies collection
+async function findOneContactByName(client, nameOfContact){
+    // format the entered name with a " _ " character to match the _id field in the collection
+    const id = nameOfContact.toString().indexOf(' ') > 0 ? nameOfContact.toString().split(' ').join('_') : nameOfContact.toString() ;
+    const result = await client.db(db_name).collection(coll).findOne({_id: id});
+    if (result) {
+        console.log(`Found a listing in the collection with the name '${nameOfContact}':`);
+        console.log(result);
+    } else {
+        console.log(`No listings found with the name '${nameOfContact}'`);
+    }
+}
+
+
+//  query a specific document in the movies collection
+async function findAllContactsByLName(client, nameOfContact){
+    const cursor = client.db(db_name).collection(coll).find({lastName: nameOfContact}).sort({ firstName: 1 });
+    const result = await cursor.toArray();
+    if (result) {
+      console.log(`Found listings in the collection with the last name '${nameOfContact}':`);
+      console.log(result);
+    } else {
+      console.log(`No listings found with the last name '${nameOfContact}'`);
+    }
+  }
+
+  async function findAllContactsByFName(client, nameOfContact){
+    const cursor = client.db(db_name).collection(coll).find({firstName: nameOfContact}).sort({ lastName: 1 });
+    const result = await cursor.toArray();
+    if (result.length > 0) {
+        console.log(`Found listings in the collection with the first name '${nameOfContact}':`);
+        console.log(result);
+    } else {
+        console.log(`No listings found with the first name '${nameOfContact}'`);
+    }
+}
+
+
+
+HTTP Method: POST
+Request URL: http://localhost:3000/movies/create
+HTTP Headers:
+Content-Type: application/json
+Request Body: A JSON object with the following properties:
+firstName
+lastName
+email
+favoriteColor
+birthday
+Here is an example of what your request might look like in Thunder Client:
+
+bash
+Copy code
+POST http://localhost:3000/movies/create
+Content-Type: application/json
+
+{
+  "firstName": "Tony",
+  "lastName": "Melmann",
+  "email": "tmelmann@gmail.com",
+  "favoriteColor": "blue",
+  "birthday": "1979-10-16T00:00:00.000Z"
+}
+
+
+  async function updateContact(req, res) {
+//     console.log('updateContact called');
+//     console.log('uri:', uri);
+//     const client = new MongoClient(uri);
+//     try {
+//       await client.connect();
+//       const { firstName, lastName, email, favoriteColor, birthday } = req.body;
+//       const contactId = req.params.id; // get the ID of the contact to update from the request parameters
+//       const updatedContact = {
+//         $set: {
+//           firstName,
+//           lastName,
+//           email,
+//           favoriteColor,
+//           birthday: new Date(birthday),
+//         },
+//       };
+//       const result = await client.db(dbName).collection(coll).updateOne({ _id: contactId }, updatedContact); // use updateOne() method to update the contact with the specified ID
+//       res.send({ message: `Contact ${contactId} updated successfully` });
+//     } catch (err) {
+//       console.error(err);
+//       throw err;
+//     } finally {
+//       await client.close();
+//     }
+//   }

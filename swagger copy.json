@@ -1,0 +1,308 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "MongoDB Movie API",
+    "description": "CSE 331 W04 MongoDB Movie API",
+    "version": "1.0.0"
+  },
+  "host": "cse341-spring23-w03-personal-working.onrender.com",
+  "basePath": "",
+  "schemes": [
+    "https"
+  ],
+  "paths": {
+    "/api-docs": {
+      "get": {
+        "description": "The API documentation for MongoDB Contacts API",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/db": {
+      "get": {
+        "description": "List of all databases in CSE 341 SRL MongoDB",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/movies": {
+      "get": {
+        "description": "Get all movies in MongoDB Movie API",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/movies/{id}": {
+      "get": {
+        "description": "Get single movie by id (ie. 'avatar_2009'), case insensitive",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/director/{name}": {
+      "get": {
+        "description": "Get all movies by Director name (ie. 'steven spielberg') - case insensitive",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/title/{title}": {
+      "get": {
+        "description": "Get single movie by Title (ie. 'avatar') - case insensitive",
+        "parameters": [
+          {
+            "title": "title",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/partial/{title}": {
+        "get": {
+          "description": "Get all movies match a partial title (ie. 'avat') - case insensitive",
+          "parameters": [
+            {
+              "title": "title",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK"
+            }
+          }
+        }
+      },
+    "/create": {
+      "post": {
+        "description": "Create a movie",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "_id": {
+                  "example": "avatar_2009"
+                },
+                "Title": {
+                  "example": "Avatar"
+                },
+                "Year": {
+                  "example": "2009"
+                },
+                "Rated": {
+                  "example": "PG-13"
+                },
+                "Rated": {
+                    "example": "PG-13"
+                  },
+                "Released": {
+                    "example": "18 Dec 2009"
+                },
+                "Runtime": {
+                    "example": "162 min"
+                },
+                "Genre": {
+                    "example": "Action, Adventure, Fantasy, Sci-Fi"
+                },
+                "Director": {
+                    "example": "James Cameron"
+                },
+                "Writer": {
+                    "example": "James Cameron"
+                },
+                "Actors": {
+                    "example": "Sam Worthington, Zoe Saldana, Sigourney Weaver, Stephen Lang"
+                },
+                "Plot": {
+                    "example": "A paraplegic Marine dispatched to the moon Pandora on a unique mission becomes torn between following his orders and protecting the world he feels is his home."
+                },
+                "Language": {
+                    "example": "English, Spanish"
+                },
+                "Country": {
+                    "example": "USA, UK"
+                },
+                "Awards": {
+                    "example": "Won 3 Oscars. Another 86 wins & 129 nominations."
+                },
+                "Poster": {
+                    "example": "https://m.media-amazon.com/images/M/MV5BMTYwOTMwMjAxMl5BMl5BanBnXkFtZTYwNzYxMzg5._V1_SX300.jpg"
+                },
+                "Metascore": {
+                    "example": "83"
+                },
+                "imdbRating": {
+                    "example": "7.8"
+                },
+                "imdbVotes": {
+                    "example": "1,087,447"
+                },
+                "imdbID": {
+                    "example": "tt0499549"
+                },
+                "Type": {
+                    "example": "movie"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          }
+        }
+      }
+    },
+    "/update/{id}": {
+        "put": {
+            "description": "Update a Contact by id(ie. 'jane_doe')",
+            "parameters": [
+              {
+                "name": "id",
+                "in": "path",
+                "required": true,
+                "type": "string"
+              },
+              {
+                "name": "body",
+                "in": "body",
+                "schema": {
+                    "type": "object",
+                    "properties": {
+                          "Title": {
+                            "example": "Avatar"
+                          },
+                          "Year": {
+                            "example": "2009"
+                          },
+                          "Rated": {
+                            "example": "PG-13"
+                          },
+                          "Rated": {
+                              "example": "PG-13"
+                            },
+                          "Released": {
+                              "example": "18 Dec 2009"
+                          },
+                          "Runtime": {
+                              "example": "162 min"
+                          },
+                          "Genre": {
+                              "example": "Action, Adventure, Fantasy, Sci-Fi"
+                          },
+                          "Director": {
+                              "example": "James Cameron"
+                          },
+                          "Writer": {
+                              "example": "James Cameron"
+                          },
+                          "Actors": {
+                              "example": "Sam Worthington, Zoe Saldana, Sigourney Weaver, Stephen Lang"
+                          },
+                          "Plot": {
+                              "example": "A paraplegic Marine dispatched to the moon Pandora on a unique mission becomes torn between following his orders and protecting the world he feels is his home."
+                          },
+                          "Language": {
+                              "example": "English, Spanish"
+                          },
+                          "Country": {
+                              "example": "USA, UK"
+                          },
+                          "Awards": {
+                              "example": "Won 3 Oscars. Another 86 wins & 129 nominations."
+                          },
+                          "Poster": {
+                              "example": "https://m.media-amazon.com/images/M/MV5BMTYwOTMwMjAxMl5BMl5BanBnXkFtZTYwNzYxMzg5._V1_SX300.jpg"
+                          },
+                          "Metascore": {
+                              "example": "83"
+                          },
+                          "imdbRating": {
+                              "example": "7.8"
+                          },
+                          "imdbVotes": {
+                              "example": "1,087,447"
+                          },
+                          "imdbID": {
+                              "example": "tt0499549"
+                          },
+                          "Type": {
+                              "example": "movie"
+                          }
+                    }
+                  }
+              }
+            ],
+            "responses": {
+              "204": {
+                "description": "No Content"
+              },
+              "500": {
+                "description": "Internal Server Error"
+              }
+            }
+          }
+        },
+    "/delete/{id}": {
+      "delete": {
+        "description": "Delete a movie by id (ie. 'avatar_2009')",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    }
+  }
+}

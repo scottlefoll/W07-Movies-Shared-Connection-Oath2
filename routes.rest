@@ -1,0 +1,109 @@
+###
+
+GET http://localhost:3000/movies HTTP/1.1
+###
+
+GET https://cse341-spring23-w05-personal-working.onrender.com/movies HTTPS/1.1
+
+###
+
+GET http://localhost:3000/db HTTP/1.1
+
+###
+GET https://cse341-spring23-w05-personal-working.onrender.com/db HTTPS/1.1
+
+###
+
+GET http://localhost:3000/movies/:id HTTP/1.1
+
+###
+
+GET https://cse341-spring23-w05-personal-working.onrender.com/movies/:id HTTPS/1.1
+
+###
+
+GET http://localhost:3000/title/:title HTTP/1.1
+
+###
+
+GET https://cse341-spring23-w05-personal-working.onrender.com/title/:title HTTPS/1.1
+
+###
+
+GET http://localhost:3000/partial/:title HTTP/1.1
+
+###
+
+GET https://cse341-spring23-w05-personal-working.onrender.com/partial/:title HTTPS/1.1
+
+###
+
+GET http://localhost:3000/director/:name HTTP/1.1
+
+###
+
+GET https://cse341-spring23-w05-personal-working.onrender.com/director/:name HTTPS/1.1
+
+###
+
+POST http://localhost:3000/create HTTP/1.1
+Content-Type: application/json
+
+{
+  "firstName": "Willis",
+  "lastName": "Jasperson",
+  "email": "johndoe@example.com",
+  "favoriteColor": "green",
+  "birthday": "1990-01-01"
+}
+
+###
+
+
+GET https://cse341-spring23-w05-personal-working.onrender.com/create/:name HTTPS/1.1
+
+{
+  "firstName": "Willis",
+  "lastName": "Jasperson",
+  "email": "johndoe@example.com",
+  "favoriteColor": "green",
+  "birthday": "1990-01-01"
+}
+
+###
+
+###
+
+PUT http://localhost:3000/update/:id HTTP/1.1
+Content-Type: application/json
+
+{
+  "firstName": "Willis",
+  "lastName": "Jasperson",
+  "email": "johndoe@example.com",
+  "favoriteColor": "green",
+  "birthday": "1990-01-01"
+}
+
+###
+
+
+PUT https://cse341-spring23-w05-personal-working.onrender.com/update/:id HTTPS/1.1
+
+{
+  "firstName": "Willis",
+  "lastName": "Jasperson",
+  "email": "johndoe@example.com",
+  "favoriteColor": "green",
+  "birthday": "1990-01-01"
+}
+
+###
+
+GET http://localhost:3000/movies/delete/john_doe HTTP/1.1
+
+###
+
+GET https://cse-342-spring23-w03.onrender.com//movies/delete/john_doe HTTP/1.1
+
+###

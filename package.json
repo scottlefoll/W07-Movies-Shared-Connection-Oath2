@@ -1,0 +1,49 @@
+{
+  "name": "Rest-practice",
+  "version": "1.0.0",
+  "description": "CSE 341 W01 NodeJS Server",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js",
+    "lint": "eslint .",
+    "lint-fix": "eslint . --fix",
+    "format": "prettier --write '**/*.{js,jsx,ts,tsx,css, md,json,html}' --config ./.prettierrc",
+    "start-prod": "node server.js",
+    "swagger": "node ./swagger.js",
+    "swagger-autogen": "node ./swagger.js"
+  },
+  "author": "Scott LeFoll",
+  "license": "ISC",
+  "engines": {
+    "node": ">=14 <15"
+  },
+  "dependencies": {
+    "@google-cloud/local-auth": "^2.1.0",
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "express-oauth2-jwt-bearer": "^1.5.0",
+    "express-session": "^1.17.3",
+    "express-validator": "^7.0.1",
+    "googleapis": "^105.0.0",
+    "mongodb": "5.3",
+    "mongoose": "^7.2.0",
+    "ngrok": "^4.3.3",
+    "node-fetch": "^3.3.1",
+    "node.js": "^0.0.1-security",
+    "passport": "^0.6.0",
+    "passport-google-oauth2": "^0.2.0",
+    "passport-oauth2": "^1.7.0",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^4.6.3",
+    "twilio": "^4.10.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.10.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "swagger-autogen": "^2.23.1"
+  }
+}

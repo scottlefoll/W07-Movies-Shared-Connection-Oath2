@@ -1,0 +1,248 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "MongoDB Mongoose Movie API",
+    "description": "CSE 331 W04 MongoDB Mongoose Movie API",
+    "version": "1.0.0"
+  },
+  "host": "cse341-spring23-mongoose-shared.onrender.com",
+  "basePath": "",
+  "schemes": [
+    "https"
+  ],
+  "paths": {
+    "/api-docs": {
+      "get": {
+        "description": "The API documentation for MongoDB Contacts API",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/db": {
+      "get": {
+        "description": "List of all databases in CSE 341 SRL MongoDB",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/movies": {
+      "get": {
+        "description": "Get all movies in MongoDB Movie API",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/movies/{id}": {
+      "get": {
+        "description": "Get single movie by id (ie. 'avatar_2009'). Movie ID must be in the format 'Title_Year', where Title is case-insensitive, alphanumeric and at least 2 characters long, and Year is numeric, and between 1900 and the current year.",
+        "example":"'avatar_2009', 'Avatar_2009', 'AVATAR_2009'",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/director/{name}": {
+      "get": {
+        "description": "Get all movies by Director name (ie. 'James Cameron', 'james cameron', 'cameron', or 'cam') - case insensitive. Note: Director name is not unique, so multiple movies may be returned. Director name is case insensitive and may be a partial match, and must contain only alphabetic characters and have a minimum length of 2",
+        "example":"'James Cameron', 'james cameron', 'cameron', 'cam'",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/title/{title}": {
+      "get": {
+        "description": "Get single movie by Title (ie. 'Avatar', or 'avatar') - case insensitive. Note: Title is unique, so only a single movie is returned. Title is case insensitive, and must contain only alphanumeric characters and have a minimum length of 2",
+        "example":"'Avatar', 'avatar'",
+        "parameters": [
+          {
+            "name": "title",
+            "in": "path",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/partial/{title}": {
+        "get": {
+          "description": "Get all movies that match a partial title (ie. 'avat') - case insensitive. Partial Title is case insensitive and may be a partial match, and must contain only alphanumeric characters and have a minimum length of 2",
+          "example":"'Avatar', 'avatar', 'avat'",
+          "parameters": [
+            {
+              "name": "title",
+              "in": "path",
+              "type": "string"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK"
+            }
+          }
+        }
+      },
+
+      "/create": {
+        "post": {
+          "description": "Create a movie",
+          "parameters": [
+            {
+              "name": "body",
+              "in": "body",
+              "schema": {
+                "type": "array",
+                "example": [
+                  {
+                    "Title": "Avatar",
+                    "Year": 2009,
+                    "Rated": "PG-13",
+                    "Released": "18 Dec 2009",
+                    "Runtime": "162 min",
+                    "Genre": "Action, Adventure, Fantasy, Sci-Fi",
+                    "Director": "James Cameron",
+                    "Writer": "James Cameron",
+                    "Actors": "Sam Worthington, Zoe Saldana, Sigourney Weaver, Stephen Lang",
+                    "Plot": "A paraplegic Marine dispatched to the moon Pandora on a unique mission becomes torn between following his orders and protecting the world he feels is his home.",
+                    "Language": "English, Spanish",
+                    "Country": "USA, UK",
+                    "Awards": "Won 3 Oscars. Another 86 wins & 129 nominations.",
+                    "Poster": "https://m.media-amazon.com/images/M/MV5BMTYwOTMwMjAxMl5BMl5BanBnXkFtZTYwNzYxMzg5._V1_SX300.jpg",
+                    "Metascore": 83,
+                    "imdbRating": 7.8,
+                    "imdbVotes": "1,087,447",
+                    "imdbID": "tt0499549",
+                    "Type": "movie"
+                  }
+                ]
+              }
+            }
+          ],
+            "responses": {
+                    "201": {
+                    "description": "Record creation successful."
+                    },
+                    "400": {
+                    "description": "Record creation unsuccessful. Bad Request - Invalid input or duplicate record found"
+                    },
+                    "500": {
+                    "description": "Record creation unsuccessful. Internal Server Error"
+                    }
+            }
+        }
+    },
+
+    "/update/{id}": {
+        "put": {
+            "description": "Update single movie by id (ie. 'avatar_2009'). Movie ID must be in the format 'Title_Year', where Title is case-insensitive, alphanumeric and at least 2 characters long, and Year is numeric, and between 1900 and the current year.",
+            "example":"'avatar_2009', 'Avatar_2009', 'AVATAR_2009'",
+            "parameters": [
+                {
+                    "name": "id",
+                    "in": "path",
+                    "required": true,
+                    "type": "string"
+                },
+                {
+                    "name": "body",
+                    "in": "body",
+                    "schema": {
+                      "type": "array",
+                      "example": [
+                        {
+                          "Title": "Avatar",
+                          "Year": 2009,
+                          "Rated": "PG-13",
+                          "Released": "18 Dec 2009",
+                          "Runtime": "162 min",
+                          "Genre": "Action, Adventure, Fantasy, Sci-Fi",
+                          "Director": "James Cameron",
+                          "Writer": "James Cameron",
+                          "Actors": "Sam Worthington, Zoe Saldana, Sigourney Weaver, Stephen Lang",
+                          "Plot": "A paraplegic Marine dispatched to the moon Pandora on a unique mission becomes torn between following his orders and protecting the world he feels is his home.",
+                          "Language": "English, Spanish",
+                          "Country": "USA, UK",
+                          "Awards": "Won 3 Oscars. Another 86 wins & 129 nominations.",
+                          "Poster": "https://m.media-amazon.com/images/M/MV5BMTYwOTMwMjAxMl5BMl5BanBnXkFtZTYwNzYxMzg5._V1_SX300.jpg",
+                          "Metascore": 83,
+                          "imdbRating": 7.8,
+                          "imdbVotes": "1,087,447",
+                          "imdbID": "tt0499549",
+                          "Type": "movie"
+                        }
+                      ]
+                    }
+                  }
+                ],
+            "responses": {
+                "204": {
+                "description": "Update unsuccessful, no Content or record not found."
+                },
+                "201": {
+                    "description": "Update successful, record updated."
+                },
+                "500": {
+                "description": "Update unsuccessful, Internal Server Error"
+                }
+            }
+        }
+    },
+    "/delete/{id}": {
+      "delete": {
+        "description": "Delete a single movie by id (ie. 'avatar_2009'). Movie ID must be in the format 'Title_Year', where Title is case-insensitive, alphanumeric and at least 2 characters long, and Year is numeric, and between 1900 and the current year.",
+        "example":"'avatar_2009', 'Avatar_2009', 'AVATAR_2009'",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Record successfully deleted"
+          },
+          "500": {
+            "description": "Record deletion unsuccessful. Internal Server Error"
+          },
+          "404": {
+            "description": "Deletion unsuccessful, record Not Found"
+          }
+        }
+      }
+    }
+  }
+}
