@@ -4,9 +4,13 @@ const routes = require('express').Router();
 const userController = require('../controllers/user-controller');
 const {param, query, validationResult} = require('express-validator');
 const moviesController = require('../controllers/movies-controller');
-const authMiddleware = require('../middleware/auth');
+const { scopes, oauth2Client, app, authenticate } = require('../middleware/auth');
 const { validateMovieFields, validateMovieParamId } = require('../validators/movieValidator');
 const curr_year = new Date().getFullYear();
+
+
+// Define the required scopes
+const requiredScopes = ['https://www.googleapis.com/auth/movies.write', 'https://www.googleapis.com/auth/movies.delete'];
 
 routes.use(passport.initialize())
 routes.use(passport.session())
@@ -15,93 +19,6 @@ routes.get('/', (req, res) => {
     res.send('Welcome to the MongoDB Movies API! Please enter a valid endpoint to continue (all parameters are case-insensitive): (/db (List of databases), /movies (List of all movies), /movies/:id (single movie by id, i.e. - avatar_2009 ), /title/:title (single movie by title, i.e. - avatar [case insensitive] ), /partial/:title (all movies by partial title, i.e. - avat [case insensitive] ), /director/:name (all movies by director name, i.e. - james cameron [case insensitive]), /create/:id (create movie), /update/:id (update movie), /delete/:id (delete movie)');
 });
 
-
-routes.get('/callback',
-  passport.authenticate('oauth2', { failureRedirect: '/login' }),
-  async (req, res, next) => {
-    try {
-      // Handle successful authentication
-      const existingUser = await User.findOne({ email: req.user.email });
-      if (!existingUser) {
-        // Create a new user
-        const newUser = new User({
-          name: req.user.name,
-          email: req.user.email,
-          // Add any other relevant user information you want to store
-        });
-        await newUser.save();
-      }
-
-      // Establish the session
-      req.login(req.user, (err) => {
-        if (err) {
-          return next(err);
-        }
-
-        // Redirect the user to a protected route or the home page
-        res.redirect('/create');
-      });
-    } catch (error) {
-      // Handle database error
-      next(error);
-    }
-  }
-);
-
-// routes.get('/callback', async (req, res, next) => {
-//     try {
-//       console.log('in callback');
-//       // Handle the authentication callback
-//       passport.authenticate('oauth2', async (err, user) => {
-//         if (err) {
-//           // Handle error during authentication
-//           return next(err);
-//         }
-
-//         if (!user) {
-//           // Handle authentication failure
-//           return res.redirect('/login'); // Redirect to the login page or show an error message
-//         }
-
-//         try {
-//           // Handle successful authentication
-//           // Check if the user already exists in your database
-//           console.log('in callback: existingUser');
-//           const existingUser = await User.findOne({ email: user.email });
-
-//           if (!existingUser) {
-//             // Create a new user
-//             console.log('in callback: create newUser');
-//             const newUser = new User({
-//               name: user.name,
-//               email: user.email,
-//               // Add any other relevant user information you want to store
-//             });
-//             await newUser.save();
-//           }
-
-//           // Establish the session
-//           console.log('in callback: start auth session');
-//           req.login(user, (err) => {
-//             if (err) {
-//               return next(err);
-//             }
-
-//             // Redirect the user to a protected route or the home page
-//             console.log('in callback: redirect to /create');
-//             res.redirect('/create');
-//           });
-//         } catch (error) {
-//           // Handle database error
-//           return next(error);
-//         }
-//       })(req, res, next);
-
-//     } catch (error) {
-//       // Handle any other errors
-//       return next(error);
-//     }
-//   });
 
 routes.get('/db', async (req, res, next) => {
     console.log('in /db');
@@ -205,45 +122,119 @@ routes.get('/director/:name', [
             }
     });
 
-routes.post('/create', authMiddleware.authenticate('oauth2'), validateMovieFields, async (req, res, next) => {
-// routes.post('/create', validateMovieFields, async (req, res, next) => {
+routes.post('/create',  authenticate('oauth2'), validateMovieFields, async (req, res, next) => {
     console.log('in /movies/create route');
     const result = validationResult(req);
     if (!result.isEmpty()) {
         return res.status(400).json({ errors: result.array() });
     }
-    try {
-        await moviesController.createMovie(req, res);
-    } catch (err) {
-        next(err);
+    if (req.user && requiredScopes.every(scope => req.session.scopes.includes(scope))) {
+        // Make API requests with the access token
+        console.log('in /admin protected route');
+        try {
+            await moviesController.createMovie(req, res, next);
+            res.send('Movies - protected create endpoint, Admin only. Create successful. Movie ID: ' + req.params.id);
+        } catch (err) {
+            res.status(500).send('Create failed. Movie Title: ' + req.body.title);
+        }
+    } else {
+        res.status(401).send('Unauthorized.');
     }
-});
+  });
 
-routes.put('/update/:id', authMiddleware.authenticate('oauth2'), validateMovieParamId, validateMovieFields, async (req, res, next) => {
+routes.put('/update/:id',  authenticate('oauth2'), validateMovieParamId, validateMovieFields, async (req, res, next) => {
     console.log('in /movies/update/:id route');
     const result = validationResult(req);
     if (!result.isEmpty()) {
         return res.status(400).json({ errors: result.array() });
     }
-    try {
-      await moviesController.updateMovie(req, res, req.params.id);
-    } catch (err) {
-      next(err);
+    if (req.user && requiredScopes.every(scope => req.session.scopes.includes(scope))) {
+        // Make API requests with the access token
+        console.log('in /admin protected route');
+        try {
+            await moviesController.updateMovie(req, res, req.params.id);
+            res.send('Movies - protected update endpoint, Admin only. Update successful. Movie ID: ' + req.params.id);
+        } catch (err) {
+            res.status(500).send('Update failed. Movie ID: ' + req.params.id);
+        }
+    } else {
+        res.status(401).send('Unauthorized.');
     }
   });
 
-
-routes.delete('/delete/:id', authMiddleware.authenticate('oauth2'), validateMovieParamId, async (req, res, next) => {
+routes.delete('/delete/:id', authenticate('oauth2'), validateMovieParamId, async (req, res, next) => {
     console.log('in /movies/delete/:id route');
     const result = validationResult(req);
     if (!result.isEmpty()) {
         return res.status(400).json({ errors: result.array() });
     }
-    try {
-        await moviesController.deleteMovie(req, res, req.params.id);
-    } catch (err) {
-        next(err);
+    if (req.user && requiredScopes.every(scope => req.session.scopes.includes(scope))) {
+        // Make API requests with the access token
+        console.log('in /admin protected route');
+        try {
+            await moviesController.deleteMovie(req, res, req.params.id);
+            res.send('Movies - protected delete endpoint, Admin only. Delete successful. Movie ID: ' + req.params.id);
+        } catch (err) {
+            res.status(500).send('Delete failed. Movie ID: ' + req.params.id);
+        }
+    } else {
+        res.status(401).send('Unauthorized');
     }
-    });
+});
+
+routes.delete('/delete/:id', authenticate('oauth2'), validateMovieParamId, async (req, res, next) => {
+    console.log('in /movies/delete/:id route');
+    const result = validationResult(req);
+    if (!result.isEmpty()) {
+        return res.status(400).json({ errors: result.array() });
+    }
+    if (req.user && requiredScopes.every(scope => req.session.scopes.includes(scope))) {
+        // Make API requests with the access token
+        console.log('in /admin protected route');
+        try {
+            await moviesController.deleteMovie(req, res, req.params.id);
+            res.send('Movies - protected delete endpoint, Admin only. Delete successful. Movie ID: ' + req.params.id);
+        } catch (err) {
+            res.status(500).send('Delete failed. Movie ID: ' + req.params.id);
+        }
+    } else {
+        res.status(401).send('Unauthorized');
+    }
+});
+
+routes.get('/admin', authenticate('oauth2'), async (req, res, next) => {
+    if (req.user && requiredScopes.every(scope => req.session.scopes.includes(scope))) {
+        console.log('in /admin protected route');
+        // Make API requests with the access token
+        // Your API logic goes here
+        res.send('Movies - protected endpoint, Admin only.');
+    } else {
+        res.status(401).send('Unauthorized');
+    }
+});
+
+// // Example protected route
+// routes.get('/members', authenticate('oauth2'), async (req, res, next) => {
+//     if (req.user && req.session.scopes.includes('https://www.googleapis.com/auth/movies.read')) {
+//         console.log('in /members protected route');
+//         // Make API requests with the access token
+//         // Your API logic goes here
+//         res.send('Movies - protected endpoint, Members only.');
+//     } else {
+//         res.status(401).send('Unauthorized');
+//     }
+// });
+
+// Example protected route
+routes.get('/admin', authenticate('oauth2'), async (req, res, next) => {
+    if (req.user && requiredScopes.every(scope => req.session.scopes.includes(scope))) {
+        console.log('in /admin protected route');
+        // Make API requests with the access token
+        // Your API logic goes here
+        res.send('Movies - protected endpoint, Admin only.');
+    } else {
+        res.status(401).send('Unauthorized');
+    }
+});
 
 module.exports = routes;

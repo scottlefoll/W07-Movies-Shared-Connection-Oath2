@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const app = express();
-const authMiddleware = require('./middleware/auth');
+// const authMiddleware = require('./middleware/auth');
 const session = require('express-session');
 const passport = require('passport');
 
@@ -15,15 +15,15 @@ app.use(session({
     resave: false,
     saveUninitialized: false
 }));
-app.use(authMiddleware.initialize());
-app.use(authMiddleware.session());
+// app.use(authMiddleware.initialize());
+// app.use(authMiddleware.session());
 
 // Protect your routes with the OAuth 2.0 middleware
-app.use('/api/movies', authMiddleware.authenticate('oauth2'));
-app.use(bodyParser.json());
+// app.use('/api/movies', authMiddleware.authenticate('oauth2'));
+// app.use(bodyParser.json());
 // const router = express.Router();
 // router.use('/', require('./swagger'));
-app.use(express.json());
+// app.use(express.json());
 require('dotenv').config();
 
 const port = process.env.PORT || 3000;
